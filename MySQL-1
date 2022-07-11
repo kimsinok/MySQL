@@ -99,7 +99,7 @@ from employees
 where department_id = 10 or department_id = 20 or department_id = 30; 
 
 
--- in 연산자에 대한 에제
+-- in 연산자에 대한 제
 -- 사원 테이블에서 사번, 부서번호를 조회하시오.
 select employee_id, department_id
 from employees
