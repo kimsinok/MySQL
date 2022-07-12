@@ -1,0 +1,457 @@
+
+-- 사원 테이블에서 급여가 10000 ~ 20000 달러를 받는 사원의 정보를 조회하시오.
+-- (사번 , 급여)
+
+select employee_id, salary
+from employees
+where salary not between 10000 and 20000;
+
+
+select employee_id, salary
+from employees
+where salary < 10000 or salary > 20000;
+
+
+-- 사원 테이블에서 부서번호가 10, 20, 30 부서에 소속된 사원의 정보를 조회하시오.
+-- 사번, 부서번호
+
+select employee_id, department_id
+from employees
+where department_id in (10, 20, 30);
+
+
+-- 사원 테이블에서 부서번호가 10, 20, 30 부서에 소속되지 않은 사원정보를 조회하시오.
+-- 사번, 부서번호
+
+select employee_id, department_id
+from employees
+where department_id not in (10, 20, 30);
+
+
+-- 사원 테이블에서 commission_pct 가 널이 아닌 (커미션을 받는) 사원정보를 조회하시오.
+-- 사번, job_id, commission_pct
+
+select employee_id, job_id, commission_pct
+from employees
+where commission_pct is not null;
+
+
+-- 사원 테이블에서 입사일자 순으로 오름차순 정렬하여 사원정보를 조회하시오.
+-- 사번, 일사일자
+
+select employee_id, hire_date 
+from employees
+order by hire_date desc;
+
+
+-- 사원 테이블에서 부서번호 순으로 오름차순 정렬하되 부서번호가 동일한 경우 사번순으로 오름차순 정렬하여 사원정보를 조회하시오.
+-- 사번, 부서번호
+
+select department_id, employee_id
+from employees
+where department_id is not null
+order by department_id asc, employee_id asc;
+
+
+-- 사원 테이블에서 부서번호를 조회하시오.
+-- 단, 중복되는 데이터를 제거하여 조회할 것.
+
+select distinct department_id
+from employees
+where department_id is not null
+order by department_id asc;
+
+
+
+-- 테이블 복사에 대한 예제
+create table emp (select * from employees);
+
+select *
+from emp;
+
+
+-- -----------------------------------------------------
+-- 숫자 함수
+-- -----------------------------------------------------
+
+select ceil(12345.678);
+
+select floor(12345.678);
+
+select round(12345.678, 1);
+
+select round(12345.678, 2);
+
+select round(12345.678, -1);
+
+select round(12345.678, -2);
+
+select truncate(12345.678, 2);
+
+select truncate(12345.678, 2);
+
+select truncate(12345.678, -2);
+
+select  truncate(10/5, 0) as '몫', mod(10, 5) as '나머지';
+
+
+-- -----------------------------------------------------
+-- 문자열 함수
+-- -----------------------------------------------------
+
+-- 사원 테이불에서 사번, 이름을 조회하시오.
+
+select employee_id, concat(first_name, ' ' , last_name) as "full_name"
+from employees;
+
+
+-- insert 함수
+select insert('AAAA', 2 , 2, 'BBB');
+select insert('AAAA', 2 , 0, 'BBB');
+
+
+-- replace 함수
+select replace('AABBCCAA', 'BB', 'FF');
+
+-- instr 함수
+select instr('ABCDEF', 'CD');
+select instr('ABCDEF', 'G');
+
+-- left 함수
+select left('ABCDEF', 2);
+
+-- right 함수
+select right('ABCDEF', 2);
+
+-- mid 함수
+select mid('ABCDEF', 3, 2);
+
+-- substring 함수
+select substring('ABCDEF', 3, 2);
+
+-- ltrim 함수
+select ltrim('   ABCDEF');
+
+-- rtrim 함수
+select rtrim('ABCDEF    ');
+
+
+-- trim 함수
+select trim('   ABCDEF    ');
+select length(trim('   ABCDEF    '));
+
+-- length 함수
+select length('ABCDEF');
+
+-- length 함수
+select length('자바');
+
+-- upper 함수
+select upper('abcdef');
+
+
+-- lower 함수
+select lower('ABCDEF');
+
+-- reverse 함수
+
+select reverse('ABCDEF');
+
+
+-- lpad 함수
+select lpad('abc', 10, '*');
+
+
+-- rpad 함수
+select rpad('abc', 10, '*');
+
+
+-- 문자열 함수에 대한 실습 문제 
+
+-- 1. 사원 테이블에서 last_name 이 'king'인 사원 정보를 조회하시오.
+--    사번, first_name, last_name
+
+select employee_id, first_name, last_name
+from employees
+where upper(last_name) = 'KING'; 
+
+select * 
+from employees;
+
+
+
+select employee_id, phone_number
+from employees;
+
+select phone_number, instr(phone_number, '.') as 'index'
+from employees;
+
+select
+substring(phone_number, instr(phone_number, '.'), length(phone_number) - instr(phone_number, '.'))
+as "substr"
+from employees;
+
+
+-- 1. 사원 테이블에서 사번과 전화번호를 조회하시오.
+--    전화번호 앞자리 masking 처리
+select employee_id, 
+	lpad(substring(phone_number, instr(phone_number, '.'), length(phone_number) - instr(phone_number, '.')), length(phone_number), '*') as "phone_number"
+from employees;
+
+
+-- -----------------------------------------------------
+-- 날짜 함수
+-- -----------------------------------------------------
+
+select now();
+
+select current_date();
+
+select current_time();
+
+select date_add(now(), interval 100 day);
+
+select date_add(now(), interval 5 month);
+
+select date_sub(now(), interval 100 day);
+
+select year(now()), month(now()), dayofmonth(now()), weekday(now()), dayofweek(now()), dayname(now()) ;
+
+
+-- 사원 테이블에서 2000년도에 입사한 사원 정보를 조회하시오.
+-- 단, 사번, 입사일자 
+
+select employee_id, hire_date
+from employees
+where year(hire_date) = 2000;
+
+
+-- 사원 테이블에서 1월, 2월, 3월에 입사한 사원 정보를 조회하시오.
+-- 사번, 입사일자 
+
+select employee_id, hire_date
+from employees
+where month(hire_date) in (1, 2, 3);
+
+
+-- 0000년 0월 0일 부터 현재 까지의 경과한 일수를 반환한다.  //'738713'
+
+select to_days(now());
+
+
+-- 사원 테이블에서 사번, 입사일자, 근무일수를 조회하시오.
+
+select employee_id, hire_date, to_days(now()) - to_days(hire_date) as "근무일수" 
+from employees;
+
+
+-- 사원 테이블에서 사번, 입사일자, 근무일수를 조회하시오.
+-- 단, 천단위로 콤마 표시할 것.
+
+select employee_id, hire_date, format(to_days(now()) - to_days(hire_date), 0) as "근무일수" 
+from employees;
+
+select date_format(now(), '%Y년 %m월 %d일 %H시 %i분 %S초');
+select date_format(now(), '%Y-%m-%d %r');
+
+
+-- 사원 테이블에서 사번, 입사일자(format : ***년 **월 **일)를 조회하시오.
+
+select employee_id, date_format(hire_date, '%Y년 %m월 %d일') as "입사일자"
+from employees;
+
+select datediff('2022-12-16', now());
+
+select timestampdiff(day, now(), '2022-12-16');
+
+select timestampdiff(month, now(), '2022-12-16');
+
+-- 사원 테이블에서 사번, 입사일자, 근무일수, 근무연수를 조회하시오.
+
+select employee_id, hire_date, datediff(now(), hire_date) as "근무일수",
+	truncate(datediff(now(), hire_date) / 365, 0) as "근무연수"
+from employees;
+
+
+select employee_id, hire_date, 
+	timestampdiff(day, hire_date, now()) as "근무일수",
+	timestampdiff(year, hire_date, now()) as "근무연수"	
+from employees;
+
+
+-- 사원 테이블에서 근무연수가 25년 이상인 사원정보를 조회하시오.
+-- 사번, 입사일자, 급여
+
+select employee_id, hire_date, salary, timestampdiff(year, hire_date, now()) as "근무연수"
+from employees
+where timestampdiff(year, hire_date, now()) >= 25;
+
+-- 제어 흐름 함수
+select if(1 > 2, 'T', 'F') ;
+
+-- 사원 테이블에서 사번, 급여, 커미션, 총급여 정보를 조회하시오.
+select employee_id, salary, commission_pct, 
+		salary + (salary * commission_pct) as "총급여"
+from employees
+where commission_pct is null;
+
+-- null 값을 산술 연산을 수행하면 null이 된다.
+
+select employee_id, salary, commission_pct, 
+		salary + (salary * commission_pct) as "총급여"
+from employees
+where commission_pct is not null;
+
+
+select employee_id, salary, if(commission_pct is null, 0, commission_pct),
+		salary + (salary * if(commission_pct is null, 0, commission_pct)) as "총급여"
+from employees
+where commission_pct is not null;
+
+
+-- ifnull() 함수
+
+select ifnull(null, '널입니다.');
+select ifnull(100, '널입니다.');
+
+
+
+select employee_id, salary, ifnull(commission_pct, 0),
+		salary + (salary * ifnull(commission_pct, 0)) as "총급여"
+from employees;
+
+
+-- nullIf
+select nullif(100, 100);
+
+select nullif(100, 200);
+
+
+
+-- -----------------------------------------------------
+-- 제어 흐름의 함수
+-- -----------------------------------------------------
+
+-- 급여 수준
+-- 급여가 10000 달러 이상 에서  25000 달러 이하인 경우  상
+-- 급여가 5000 달러 이상 에서 10000 달러 미만인 경우 중
+-- 급여가 5000 달러 미만인 경우 : 하
+
+-- 사번, 급여, 급여수준을 조회하시오.
+
+select employee_id, salary, 
+	case
+		when salary >= 10000 and salary <= 25000  then '상' 
+		when salary >= 5000 and salary < 10000 then '중' 
+        when salary < 5000 then '하' 
+    end as '급여수준'
+from employees;
+
+
+
+-- -----------------------------------------------------
+--  형변환 함수
+-- -----------------------------------------------------
+
+select cast(20220712 as date);
+
+select convert(20220712,date);
+
+select year(cast(20220712 as date));
+
+select cast(20220712 as char);
+
+select convert(20220712,char);
+
+select substring(convert(20220712,char), 1, 4);
+
+select left(convert(20220712,char), 4);
+
+
+
+-- -------------------------------------------------
+-- 집계 함수 (그룹함수)
+-- group by 와 having 구문
+-- -------------------------------------------------
+
+
+-- 사원 테이블에서 총사원수를 조회하시오. (all rows)
+select count(*) as "총사원수"
+from employees;
+
+
+select count(distinct employee_id) as "총사원수"
+from employees;
+
+-- 사원 테이블에서 중복을 포함한 부서의 수를 검색하시오.
+select count(all department_id) as "부서 수"
+from employees;
+
+-- 사원 테이블에서 중복을 제거한 부서의 수를 검색하시오.
+select count(distinct department_id) as "부서 수"
+from employees;
+
+
+select employee_id, department_id
+from employees
+where department_id is null;
+
+-- 사원 케이블에서 최고급여와 최저급여를 조회하시오.
+select max(salary), min(salary)
+from employees;
+
+-- 사원 케이블에서 최근 입사일자와 최초 입사일지를 조회하시오.
+select max(hire_date), min(hire_date)
+from employees;
+
+-- 사원 케이블에서 총 급여와 평균 급여를 조회하시오.
+select format(sum(salary), 0), format(avg(salary), 0)
+from employees;
+
+-- 부서별 총 사원수를 조회하시오.
+select department_id, count(*)
+from employees
+where department_id  is not null
+group by department_id;
+
+
+-- 부서별 최고급여와 최저급여를 조회하시오.
+select department_id, max(salary), min(salary)
+from employees
+where department_id  is not null
+group by department_id;
+
+
+-- 부서별 총 사원수를 조회하시오.
+select department_id, count(*) as "count"
+from employees
+where department_id  is not null
+group by department_id
+having count(*) >= 5 
+order by count desc;
+
+
+select department_id, max(salary)
+from employees
+where department_id  is not null
+group by department_id;
+
+-- 부서번호가 10, 20, 30 부서중에서 부셔별 최고급여가 100000 달러 이상인 부서번호와 최고급여를 조회하시오.
+
+select department_id, max(salary)
+from employees
+where department_id in (10, 20, 30)
+group by department_id
+having max(salary) >= 10000;
+
+
+
+
+
+
+
+
+
+
+
+
