@@ -1,0 +1,193 @@
+-- 부서 테이블 정보 조회
+
+select *
+from departments;
+
+-- --------------------------------------------------------------
+-- 조인
+-- --------------------------------------------------------------
+
+-- --------------------------------------------------------------
+--  INNER JOIN 에 대한 예제
+-- --------------------------------------------------------------
+
+-- 사번이 100인 사원의 정보를 조회하시오.
+-- 단, 사번, 입사일자, 부서명
+
+select emp.employee_id, emp.hire_date, dept.department_name, dept.department_id 
+from employees emp
+inner join departments dept
+on emp.department_id = dept.department_id
+where emp.employee_id = 178;
+
+
+
+-- 총 사원수를 조회히사오. (107명)
+
+select count(*) as "총사원수"
+from employees;
+
+
+-- 전체 사원의 정보를 조회하시오. (106명)
+-- 단, 사번, 입사일자, 부서명
+
+select emp.employee_id, emp.hire_date, dept.department_name, dept.department_id 
+from employees emp
+inner join departments dept
+on emp.department_id = dept.department_id;
+
+
+
+-- jobs 테이블 조회
+select * from jobs;
+
+
+-- 사번이 100인 사원의 정보를 조회하시오.
+-- 단, 사번, 입사일자, job_title
+
+select emp.employee_id, emp.hire_date, j.job_title
+from employees emp
+inner join jobs j
+on emp.job_id = j.job_id
+where emp.employee_id = 100;
+
+
+-- 사번이 100인 사원의 정보를 조회하시오.
+-- 단, 사번, 입사일자, 부서명, job_title
+
+select emp.employee_id, emp.hire_date, dept.department_name, j.job_title
+from employees emp
+inner join departments dept
+on emp.department_id = dept.department_id
+inner join jobs j
+on emp.job_id = j.job_id
+where emp.employee_id = 100;
+
+
+-- --------------------------------------------------------------
+-- LEFT OUTER JOIN 에 대한 예제
+-- --------------------------------------------------------------
+
+-- 전체 사원의 정보를 조회하시오.
+-- 사번, 입사일자, 부서명
+-- 단, 부서에 소속되지 않는 사원 정보도 조회할 것.
+
+select emp.employee_id, emp.hire_date, dept.*
+from employees emp
+left outer join departments dept
+on emp.department_id = dept.department_id
+where emp.employee_id = 178;
+
+
+
+select emp.employee_id, emp.hire_date, dept.*
+from departments dept
+right outer join employees emp
+on dept.department_id = emp.department_id
+where emp.employee_id = 178;
+
+
+-- 전체 사원의 정보를 조회하시오.
+-- 단, 부서에 소속되지 않은 사원도 조회할 것.
+
+select emp.employee_id, emp.hire_date, dept.*
+from employees emp
+left outer join departments dept
+on emp.department_id = dept.department_id;
+
+-- locations 테이블 정보 조회하기
+
+select *
+from locations;
+
+
+
+-- 전체 사원의 정보를 조회하시오. 
+-- 단, 부서에 소속되지 않은 사원도 조회할 것.
+-- 사번, 입사일자, 부서명, 도시명
+
+select emp.employee_id, emp.hire_date, dept.department_name, loc.city 
+from employees emp
+left outer join departments dept
+on emp.department_id = dept.department_id
+left outer join locations loc
+on dept.location_id = loc.location_id;
+
+
+
+-- --------------------------------------------------------------
+-- SELF JOIN 에 대한 예제
+-- --------------------------------------------------------------
+
+-- 사원 정보를 조회하시오.
+-- 사번, 이름, manager_id (상급자 사번)
+
+select employee_id, concat(first_name, ' ', last_name) as  "full_name", manager_id
+from employees;
+
+
+-- 사원 정보를 조회하시오.
+-- 사번, 이름, manager_id (상급자 사번), 상급자 이름
+
+select emp.employee_id, concat(emp.first_name, ' ', emp.last_name)  as "이름",
+    emp.manager_id, concat(mgr.first_name, ' ', mgr.last_name)  as "상급자 이름"
+from employees emp
+join employees mgr
+on emp.manager_id = mgr.employee_id;
+
+
+
+-- --------------------------------------------------------------
+-- 집합(SET) 에 대한 예제
+-- --------------------------------------------------------------
+
+
+-- --------------------------------------------------------------
+-- UNION 에 대한 예제 :  합집합
+-- --------------------------------------------------------------
+
+select department_id from employees
+union 
+select department_id from departments;
+
+-- --------------------------------------------------------------
+-- UNION ALL 에 대한 예제 
+-- --------------------------------------------------------------
+
+select department_id from employees
+union all
+select department_id from departments;
+
+
+select distinct department_id
+from employees;
+
+
+-- --------------------------------------------------------------
+-- MINUS 에 대한 예제 (LEFT OUTER JOIN)
+-- --------------------------------------------------------------
+
+select dept.department_id, emp.department_id 
+from departments dept
+left outer join employees emp
+on dept.department_id = emp.department_id;
+
+
+-- 소속된 사원이 한 명도 없는 부서번호를 조회하시오.
+
+select distinct dept.department_id
+from departments dept
+left outer join employees emp
+on dept.department_id = emp.department_id
+where emp.department_id is null;
+
+
+
+
+
+
+
+
+
+
+
