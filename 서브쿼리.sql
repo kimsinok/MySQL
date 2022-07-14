@@ -319,6 +319,9 @@ from (select *
       where department_id = 50) as emp;
 
 
+
+-- 사원테이블에서 6번째 행부터 10개의 행을 조회하시오.
+
 select *
 from employees
 limit 10 offset 5;
